@@ -50,6 +50,22 @@ convert(txt) {
 	* convert tables
 		{| class="wikitable" ... |}
 */
+ObjHasValue(aObj, aValue, rx:="") {
+; modified from http://www.autohotkey.com/board/topic/84006-ahk-l-containshasvalue-method/	
+   for key, val in aObj
+		if (rx) {
+			if (rx=="i") {													; make case insensitive search
+				val := "i)" val
+			}
+			if (aValue ~= val) {
+				return, key, Errorlevel := 0
+			}
+		} else {
+			if (val = aValue) {
+				return, key, ErrorLevel := 0
+			}
+		}
+    return, false, errorlevel := 1
 }
 
 #Include strX.ahk
