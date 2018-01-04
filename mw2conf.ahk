@@ -55,6 +55,7 @@ convert(txt) {
 		l := A_LoopField																; read next line
 		
 		l := clean_br(l)																; clear instances of <br>
+		l := chk_header(l)																; do header check
 	}
 	
 	return newtxt
@@ -62,6 +63,21 @@ convert(txt) {
 
 clean_br(txt) {
 	txt := RegExReplace(txt,"<br>|<br />|</br>")
+	return txt
+}
+
+chk_header(txt) {
+	tag := object()
+	tag["hdr"] := ["^= ", "^== ", "^=== ", "^==== "]
+	tag["end"] := [" =", " ==", " ===", " ===="]
+	tag["sub"] := ["h1. ", "h2. ", "h3. ", "h4. "]
+	
+	if (idx:=objHasValue(tag["hdr"],txt,1)) {
+		txt := RegExReplace(txt,tag["hdr",idx])
+		txt := RegExReplace(txt,tag["end",idx])
+		txt := tag["sub",idx] txt
+	}
+	
 	return txt
 }
 
