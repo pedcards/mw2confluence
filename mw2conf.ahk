@@ -54,9 +54,15 @@ convert(txt) {
 	{
 		l := A_LoopField																; read next line
 		
+		l := clean_br(l)																; clear instances of <br>
 	}
 	
 	return newtxt
+}
+
+clean_br(txt) {
+	txt := RegExReplace(txt,"<br>|<br />|</br>")
+	return txt
 }
 
 ObjHasValue(aObj, aValue, rx:="") {
