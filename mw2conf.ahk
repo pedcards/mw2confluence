@@ -50,6 +50,15 @@ convert(txt) {
 	* convert tables
 		{| class="wikitable" ... |}
 */
+	Loop, parse, txt, `n, `r
+	{
+		l := A_LoopField																; read next line
+		
+	}
+	
+	return newtxt
+}
+
 ObjHasValue(aObj, aValue, rx:="") {
 ; modified from http://www.autohotkey.com/board/topic/84006-ahk-l-containshasvalue-method/	
    for key, val in aObj
