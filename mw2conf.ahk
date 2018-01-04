@@ -19,12 +19,38 @@ Loop, % (pages := y.selectNodes("mediawiki/page")).length
 	rev := revs.item(revs.length-1)
 	rev_text := rev.selectSingleNode("text").text
 	
+	new_text := convert(rev_text)
+	
 	MsgBox,
 		, % title
 		, rev_text
 }
 
 ExitApp
+
+convert(txt) {
+/*	MW markup in, Confluence markup out
+	* remove <br> or <br /> or </br>
+	* read each line to find header marks (and closing 
+		= 		h1.
+		==		h2.
+		===		h3.
+		====	h4.
+		----    ----
+		
+	* convert open and closing marks
+		''' (b)
+		'' (i)
+		<u>
+		<b>
+		<i>
+	* convert links
+		[[page | text]]		[text | page]
+		[URL text follows]	[text precedes URL]
+	* convert tables
+		{| class="wikitable" ... |}
+*/
+}
 
 #Include strX.ahk
 #Include stRegX.ahk
