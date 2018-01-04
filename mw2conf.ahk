@@ -23,7 +23,7 @@ Loop, % (pages := y.selectNodes("mediawiki/page")).length
 	
 	MsgBox,
 		, % title
-		, rev_text
+		, % rev_text "`n----`n" new_text
 }
 
 ExitApp
@@ -56,6 +56,8 @@ convert(txt) {
 		
 		l := clean_br(l)																; clear instances of <br>
 		l := chk_header(l)																; do header check
+		
+		newtxt .= l "`n"
 	}
 	
 	return newtxt
