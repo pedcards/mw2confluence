@@ -10,7 +10,7 @@ fileIn := "allpages.xml"
 
 y := new XML(fileIn)
 
-Loop, % (pages := y.selectNodes("mediawiki/page")).length
+Loop, % (pages := y.selectNodes("mediawiki/page")).length()
 {
 	idx := A_Index
 	page := pages.item(idx-1)
