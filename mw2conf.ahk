@@ -129,6 +129,12 @@ chk_wikiLinks(txt) {
 	return txt
 }
 
+chk_Url(txt) {
+	txt := RegExReplace(txt,"i)\[(http.?:\/\/.*?)((\s)(.*))?\]","[$4 $1]")						; reverse [http://google.com The GOOGLE] to [The GOOGLE http://google.com]
+	
+	return txt
+}
+
 ObjHasValue(aObj, aValue, rx:="") {
 ; modified from http://www.autohotkey.com/board/topic/84006-ahk-l-containshasvalue-method/	
    for key, val in aObj
