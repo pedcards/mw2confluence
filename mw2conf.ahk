@@ -57,6 +57,7 @@ convert(txt) {
 		l := clean_br(l)																; clear instances of <br>
 		l := chk_header(l)																; do header check
 		l := chk_tags(l)																; convert tags
+		l := chk_wikiLinks(l)															; convert [[wiki links]]
 		
 		newtxt .= l "`n"
 	}
@@ -113,6 +114,13 @@ chk_tags(txt) {
 	{
 		txt := RegExReplace(txt,"(?<!<nowiki>)" tag[A_Index] "(?!</nowiki>)", sub[A_Index])
 	}
+	
+	return txt
+}
+
+chk_wikiLinks(txt) {
+	txt := RegExReplace(txt,"\[\[(.*)?\s*\|\s*(.*)?\]\]","[[$2|$1]]")							; reverse [[aaa|bbb]] to [[bbb|aaa]]
+	txt := RegExReplace(txt,"\[\[(.*?)\s*?\]\]","[$1]")											; reduce [[aaa]] to [aaa], and remove any trailing \s
 	
 	return txt
 }
