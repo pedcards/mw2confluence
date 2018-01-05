@@ -56,6 +56,7 @@ convert(txt) {
 		
 		l := clean_br(l)																; clear instances of <br>
 		l := chk_header(l)																; do header check
+		l := chk_tags(l)																; convert tags
 		
 		newtxt .= l "`n"
 	}
@@ -78,6 +79,40 @@ chk_header(txt) {
 		txt := RegExReplace(txt,tag["hdr",idx])
 		txt := RegExReplace(txt,tag["end",idx])
 		txt := tag["sub",idx] txt
+	}
+	
+	return txt
+}
+
+chk_tags(txt) {
+	tag := ["<b>","</b>"
+			,"<u>","</u>"
+			,"<i>","</i>"
+			,"<ins>","</ins>"
+			,"<del>","</del>"
+			,"'''''"
+			,"'''"
+			,"''"
+			,"{{","}}"
+			,"<big>","</big>"
+			,"<small>","</small>"
+			,"<code>","</code>"]
+	sub := ["*","*"
+			,"+","+"
+			,"_","_"
+			,"+","+"
+			,"-","-"
+			,"*_"
+			,"*"
+			,"_"
+			,"((","))"
+			,"",""
+			,"",""
+			,"{{","}}"]
+	
+	loop, % tag.length()
+	{
+		txt := RegExReplace(txt,"(?<!<nowiki>)" tag[A_Index] "(?!</nowiki>)", sub[A_Index])
 	}
 	
 	return txt
