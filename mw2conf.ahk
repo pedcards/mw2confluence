@@ -62,6 +62,9 @@ convert(txt) {
 		newtxt .= l "`n"
 	}
 	
+	clean_br(newtxt)																		; clear instances of <br>
+	clean_table(newtxt)																	; fix tables
+	
 	return newtxt
 }
 
@@ -130,9 +133,38 @@ chk_wikiLinks(byref txt) {
 }
 
 chk_Url(byref txt) {
-	txt := RegExReplace(txt,"i)\[(http.?:\/\/.*?)((\s)(.*))?\]","[$4 $1]")						; reverse [http://google.com The GOOGLE] to [The GOOGLE http://google.com]
+	txt := RegExReplace(txt,"i)\[(http.?:\/\/.*?)((\s)(.*?))?\]","[$4 $1]")						; reverse [http://google.com The GOOGLE] to [The GOOGLE http://google.com]
 	
 	return txt
+}
+
+clean_table(byref txt) {
+	txt := RegExReplace(txt,"im)(*ANYCRLF)^.?\{\| class=.wikitable","{| class=""wikitable")
+	while instr(txt,"{| class=""wikitable") {
+		RegExMatch(txt,"Oi)\{\| class=.wikitable(.*?)\|\}",ex)
+		tbl := ex.value()
+		pos := ex.pos()
+		len := ex.len()
+		
+		tbl := RegExReplace(tbl,"i)\{\| class=.wikitable(.*?)[\r\n]+")
+		tbl := RegExReplace(tbl,"\|\}(.*?)[\r\n]*")
+		tbl := RegExReplace(tbl,"m)(*ANYCRLF)^\|-[\r\n]")
+		
+		loop, parse, tbl, `n, `r
+		{
+			row := A_LoopField
+			if (row~="^! ") {
+				row := RegExReplace(row,"^! ","!! ") " !!"
+				row := RegExReplace(row,"!!","||")
+			}
+			else if (row~="^\| ") {
+				row := RegExReplace(row,"^\| ","|| ") " ||"
+				row := RegExReplace(row,"\|\|","|")
+			}
+			newtbl .= row "`n"
+		}
+		txt := RegExReplace(txt,"(.*?)\|\}",newtbl,,,pos)
+	}
 }
 
 ObjHasValue(aObj, aValue, rx:="") {
