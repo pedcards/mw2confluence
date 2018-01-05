@@ -54,10 +54,10 @@ convert(txt) {
 	{
 		l := A_LoopField																; read next line
 		
-		l := clean_br(l)																; clear instances of <br>
-		l := chk_header(l)																; do header check
-		l := chk_tags(l)																; convert tags
-		l := chk_wikiLinks(l)															; convert [[wiki links]]
+		chk_header(l)																	; do header check
+		chk_tags(l)																		; convert tags
+		chk_wikiLinks(l)																; convert [[wiki links]]
+		chk_Url(l)																		; convert [http(s):]]
 		
 		newtxt .= l "`n"
 	}
@@ -65,12 +65,12 @@ convert(txt) {
 	return newtxt
 }
 
-clean_br(txt) {
+clean_br(byref txt) {
 	txt := RegExReplace(txt,"<br>|<br />|</br>")
 	return txt
 }
 
-chk_header(txt) {
+chk_header(byref txt) {
 	tagHdr := ["^= ", "^== ", "^=== ", "^==== "]
 	tagEnd := [" =", " ==", " ===", " ===="]
 	tagSub := ["h1. ", "h2. ", "h3. ", "h4. "]
@@ -84,7 +84,7 @@ chk_header(txt) {
 	return txt
 }
 
-chk_tags(txt) {
+chk_tags(byref txt) {
 	tag := ["<b>","</b>"
 			,"<u>","</u>"
 			,"<i>","</i>"
@@ -122,14 +122,14 @@ chk_tags(txt) {
 	return txt
 }
 
-chk_wikiLinks(txt) {
+chk_wikiLinks(byref txt) {
 	txt := RegExReplace(txt,"\[\[(.*)?\s*\|\s*(.*)?\]\]","[[$2|$1]]")							; reverse [[aaa|bbb]] to [[bbb|aaa]]
 	txt := RegExReplace(txt,"\[\[(.*?)\s*?\]\]","[$1]")											; reduce [[aaa]] to [aaa], and remove any trailing \s
 	
 	return txt
 }
 
-chk_Url(txt) {
+chk_Url(byref txt) {
 	txt := RegExReplace(txt,"i)\[(http.?:\/\/.*?)((\s)(.*))?\]","[$4 $1]")						; reverse [http://google.com The GOOGLE] to [The GOOGLE http://google.com]
 	
 	return txt
