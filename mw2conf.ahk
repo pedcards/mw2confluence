@@ -182,6 +182,8 @@ chk_tags(byref txt) {
 		txt := RegExReplace(txt,"(?<!<nowiki>)" tag[A_Index] "(?!</nowiki>)", sub[A_Index])
 	}
 	
+	txt := RegExReplace(txt,"(?<=\w)\*\_","_*")
+	
 	return txt
 }
 
@@ -193,7 +195,7 @@ chk_wikiLinks(byref txt) {
 }
 
 chk_Url(byref txt) {
-	txt := RegExReplace(txt,"i)\[(http.?:\/\/.*?)((\s)(.*?))?\]","[$4 $1]")						; reverse [http://google.com The GOOGLE] to [The GOOGLE http://google.com]
+	txt := RegExReplace(txt,"i)\[(http.?:\/\/.*?)((\s)(.*?))?\]","[$4|$1]")						; reverse [http://google.com The GOOGLE] to [The GOOGLE http://google.com]
 	
 	return txt
 }
